@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.hoangnd.swin.distinctionproject.fragment.LoginFragment">
+
+    <EditText android:id="@+id/email" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress" android:maxLines="1"
+        android:imeOptions="actionNext"
+        android:singleLine="true" />
+
+    <EditText android:id="@+id/password" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="@string/prompt_password"
+        android:imeActionId="@+id/login"
+        android:imeActionLabel="@string/action_login_ime"
+        android:imeOptions="actionUnspecified" android:inputType="textPassword"
+        android:maxLines="1" android:singleLine="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/email_register_button" style="?android:textAppearanceSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/action_register"
+            android:textAllCaps="true" />
+
+        <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/action_login"
+            android:textStyle="bold"
+            android:textAllCaps="true" />
+    </LinearLayout>
+
+</LinearLayout>

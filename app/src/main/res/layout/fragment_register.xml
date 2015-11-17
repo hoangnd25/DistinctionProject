@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.hoangnd.swin.distinctionproject.fragment.RegisterFragment">
+
+    <EditText android:id="@+id/email" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress" android:maxLines="1"
+        android:imeOptions="actionNext"
+        android:singleLine="true" />
+
+    <EditText android:id="@+id/password" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="@string/prompt_password"
+        android:inputType="textPassword"
+        android:imeOptions="actionNext"
+        android:maxLines="1" android:singleLine="true" />
+
+    <EditText android:id="@+id/repeat_password" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:hint="@string/prompt_repeat_password"
+        android:imeActionId="@+id/register"
+        android:imeActionLabel="@string/action_register_ime"
+        android:imeOptions="actionUnspecified" android:inputType="textPassword"
+        android:maxLines="1" android:singleLine="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal">
+
+        <Button android:id="@+id/email_already_have_account_button" style="?android:textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/action_already_have_account"
+            android:textAllCaps="true" />
+
+        <Button
+            android:id="@+id/email_register_button" style="?android:textAppearanceSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/action_register"
+            android:textStyle="bold"
+            android:textAllCaps="true" />
+    </LinearLayout>
+</LinearLayout>
