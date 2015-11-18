@@ -3,8 +3,11 @@ package me.hoangnd.swin.distinctionproject.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +25,7 @@ import java.util.List;
 import me.hoangnd.swin.distinctionproject.R;
 import me.hoangnd.swin.distinctionproject.data.Task;
 
-public class TaskListFragment extends ListFragment {
+public class TaskListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener{
     private static final String DUE_DATE = "due_date";
     private static final String TAG_ID = "tag_id";
 
@@ -32,6 +35,8 @@ public class TaskListFragment extends ListFragment {
     private ArrayAdapter<Task> adapter;
 
     private OnFragmentInteractionListener mListener;
+
+    SwipeRefreshLayout refreshLayout;
 
     // TODO: Rename and change types of parameters
     public static TaskListFragment newInstance(String tagId, Date dueDate) {
@@ -87,26 +92,6 @@ public class TaskListFragment extends ListFragment {
         super.onStart();
 
         reloadFromLocalData();
-        Task.getAll(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e != null)
-                    return;
-                final List<ParseObject> retrievedObjects = objects;
-
-                ParseObject.unpinAllInBackground(Task.TABLE_NAME, new DeleteCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        ParseObject.pinAllInBackground(Task.TABLE_NAME, retrievedObjects, new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                reloadFromLocalData();
-                            }
-                        });
-                    }
-                });
-            }
-        }, false);
     }
 
     protected void reloadFromLocalData(){
@@ -122,6 +107,65 @@ public class TaskListFragment extends ListFragment {
                 }
             }
         }, true);
+    }
+
+    @Override
+    public void onRefresh() {
+        Task.getAll(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e != null)
+                    return;
+                final List<ParseObject> retrievedObjects = objects;
+
+                ParseObject.unpinAllInBackground(Task.TABLE_NAME, new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        ParseObject.pinAllInBackground(Task.TABLE_NAME, retrievedObjects, new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                reloadFromLocalData();
+                                refreshLayout.setRefreshing(false);
+                            }
+                        });
+                    }
+                });
+            }
+        }, false);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (firstVisibleItem == 0 && visibleItemCount > 0 && getListView().getChildAt(0).getTop() >= 0) {
+            refreshLayout.setEnabled(true);
+        }
+        else {
+            refreshLayout.setEnabled(false);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup listContainer = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
+        refreshLayout = new SwipeRefreshLayout(inflater.getContext());
+        refreshLayout.addView(listContainer);
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        return refreshLayout;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setOnScrollListener(this);
     }
 
     @Override
