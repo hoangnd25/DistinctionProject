@@ -70,13 +70,8 @@ public class EditTaskActivity extends AppCompatActivity {
         task
                 .setName(name)
                 .setDueDate(date)
-                .save(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null)
-                            finish();
-                    }
-                });
+                .save();
+        finish();
     }
 
     @Override

@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return TaskListFragment.newInstance();
+                    return TaskListFragment.newInstance(null, null);
                 case 1:
                     return PlaceholderFragment.newInstance();
                 case 2:
