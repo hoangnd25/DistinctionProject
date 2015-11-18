@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Task</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_add_task">Add task</string>
 
     <string name="title_tab_list">List</string>
     <string name="title_tab_calendar">Calendar</string>
@@ -8,4 +9,6 @@
     <string name="title_tab_account">My account</string>
 
     <string name="action_add_task">Add</string>
+    <string name="action_save">Save</string>
+
 </resources>

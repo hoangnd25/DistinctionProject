@@ -1,0 +1,8 @@
+<resources>
+    <string name="error_invalid_date">This date is invalid</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_field_password_not_match">Repeat password does not match</string>
+</resources>

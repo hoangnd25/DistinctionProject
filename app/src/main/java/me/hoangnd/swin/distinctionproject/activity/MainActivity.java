@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         int id = item.getItemId();
 
         if (id == R.id.action_add_task) {
+            // Open add task activity
+            Intent intent =  new Intent(this, EditTaskActivity.class);
+            startActivity(intent);
             return true;
         }
 
