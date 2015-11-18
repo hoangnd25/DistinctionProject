@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                ParseUser.logIn(mEmail, mPassword);
+                ParseUser.logIn(mEmail.toLowerCase(), mPassword);
                 return true;
             } catch (ParseException e) {
                 final String message = e.getMessage();
@@ -186,8 +186,8 @@ public class LoginActivity extends AppCompatActivity implements
         protected Boolean doInBackground(Void... params) {
             try {
                 ParseUser user = new ParseUser();
-                user.setUsername(mEmail);
-                user.setEmail(mEmail);
+                user.setUsername(mEmail.toLowerCase());
+                user.setEmail(mEmail.toLowerCase());
                 user.setPassword(mPassword);
                 user.signUp();
                 finish();
