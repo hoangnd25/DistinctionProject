@@ -7,5 +7,6 @@
     <string name="action_register_ime">Register</string>
     <string name="action_login">Login</string>
     <string name="action_login_ime">Login</string>
+    <string name="action_logout">Logout</string>
     <string name="action_already_have_account">Already have account?</string>
 </resources>

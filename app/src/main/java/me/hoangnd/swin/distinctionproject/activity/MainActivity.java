@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.parse.ParseUser;
 
 import me.hoangnd.swin.distinctionproject.R;
+import me.hoangnd.swin.distinctionproject.fragment.MyAccountFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TagListFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TaskListFragment;
 
@@ -36,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         // Check if user is not logged in, open login page
         ParseUser currentUser = ParseUser.getCurrentUser();
         if(currentUser == null){
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            openLoginPage();
         }
     }
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 case 2:
                     return TagListFragment.newInstance();
                 case 3:
-                    return PlaceholderFragment.newInstance();
+                    return MyAccountFragment.newInstance();
             }
             return null;
         }
@@ -151,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             }
             return null;
         }
+    }
+
+    public void openLoginPage(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     /**
