@@ -37,6 +37,7 @@ public class Tag {
         if(local)
             query.fromPin(TABLE_NAME);
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
+        query.orderByAscending("name");
         query.findInBackground(callback);
     }
 

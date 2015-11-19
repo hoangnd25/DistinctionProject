@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.parse.ParseUser;
 
 import me.hoangnd.swin.distinctionproject.R;
+import me.hoangnd.swin.distinctionproject.fragment.TagListFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TaskListFragment;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 case 1:
                     return PlaceholderFragment.newInstance();
                 case 2:
-                    return PlaceholderFragment.newInstance();
+                    return TagListFragment.newInstance();
                 case 3:
                     return PlaceholderFragment.newInstance();
             }
