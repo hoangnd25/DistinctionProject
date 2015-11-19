@@ -19,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -111,6 +112,7 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
+        // Get new data from server
         Task.getAll(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -118,18 +120,34 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
                     return;
                 final List<ParseObject> retrievedObjects = objects;
 
-                ParseObject.unpinAllInBackground(Task.TABLE_NAME, new DeleteCallback() {
+                // Get all data from local storage
+                Task.getAll(new FindCallback<ParseObject>() {
                     @Override
-                    public void done(ParseException e) {
-                        ParseObject.pinAllInBackground(Task.TABLE_NAME, retrievedObjects, new SaveCallback() {
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        // Find saved objects (objectId != null)
+                        List<ParseObject> savedObjects = new ArrayList<ParseObject>();
+                        for (ParseObject obj : objects) {
+                            if (obj.getObjectId() != null)
+                                savedObjects.add(obj);
+                        }
+
+                        // Unpin all saved objects
+                        ParseObject.unpinAllInBackground(Task.TABLE_NAME, savedObjects, new DeleteCallback() {
                             @Override
                             public void done(ParseException e) {
-                                reloadFromLocalData();
-                                refreshLayout.setRefreshing(false);
+                                // Save new data from server
+                                ParseObject.pinAllInBackground(Task.TABLE_NAME, retrievedObjects, new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        reloadFromLocalData();
+                                        refreshLayout.setRefreshing(false);
+                                    }
+                                });
                             }
                         });
                     }
-                });
+                }, true);
+
             }
         }, false);
     }
