@@ -146,11 +146,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             switch (position) {
                 case 0:
                     return TaskListFragment.newInstance(null, null);
+//                case 1:
+//                    return PlaceholderFragment.newInstance();
                 case 1:
-                    return PlaceholderFragment.newInstance();
-                case 2:
                     return TagListFragment.newInstance();
-                case 3:
+                case 2:
                     return MyAccountFragment.newInstance();
             }
             return null;
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 3;
         }
 
         @Override
@@ -168,11 +168,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             switch (position) {
                 case 0:
                     return getString(R.string.title_tab_list).toUpperCase(l);
+//                case 1:
+//                    return getString(R.string.title_tab_calendar).toUpperCase(l);
                 case 1:
-                    return getString(R.string.title_tab_calendar).toUpperCase(l);
-                case 2:
                     return getString(R.string.title_tab_tag).toUpperCase(l);
-                case 3:
+                case 2:
                     return getString(R.string.title_tab_account).toUpperCase(l);
             }
             return null;
