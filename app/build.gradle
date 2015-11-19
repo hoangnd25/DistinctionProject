@@ -25,5 +25,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
-    compile "com.splitwise:tokenautocomplete:2.0.2@aar"
+    compile 'com.splitwise:tokenautocomplete:2.0.2@aar'
+    compile 'com.github.windyzboy:CustomEditor:v1.0.1'
 }

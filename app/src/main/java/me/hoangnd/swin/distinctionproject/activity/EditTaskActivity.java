@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,9 +37,12 @@ public class EditTaskActivity extends AppCompatActivity {
 
     boolean isEditing = false;
     Task task;
+    String taskId;
+    String receivedDescription = null;
 
     EditText nameInput;
     EditText dateInput;
+    TextView descriptionText;
     TagsCompletionView tagInput;
     ArrayAdapter<Tag> tagAdapter;
 
@@ -48,16 +53,59 @@ public class EditTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
-        String id = null;
-        Intent intent = getIntent();
+        Button editDescriptionButton = (Button)findViewById(R.id.button_edit_description);
+        editDescriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent descriptionIntent = new Intent(EditTaskActivity.this, DescriptionActivity.class);
+                descriptionIntent.putExtra("id", taskId);
+                String description = task.getDescription() == null ? "" : task.getDescription();
+                descriptionIntent.putExtra("description", description);
+                startActivityForResult(descriptionIntent, 0);
+            }
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("taskId", taskId);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        taskId = savedInstanceState.getString("taskId");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != 0 || data == null)
+            return;
+
+        if(data.getExtras() == null)
+            return;
+
+        taskId = data.getExtras().getString("id");
+        receivedDescription = data.getExtras().getString("description");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        taskId = null;
+        final Intent intent = getIntent();
         if(intent != null & intent.getExtras() != null){
-            id = intent.getExtras().getString(ID_PARAM);
+            taskId = intent.getExtras().getString(ID_PARAM);
         }
 
-        if(id == null){
+        if(taskId == null){
             task = Task.newInstance();
         }else{
-            task = Task.getById(id);
+            task = Task.getById(taskId);
             setTitle(getResources().getString(R.string.title_activity_edit_task));
             isEditing = true;
         }
@@ -68,6 +116,14 @@ public class EditTaskActivity extends AppCompatActivity {
         nameInput.setText(task.getName());
         dateInput.setText(dateFormat.format(task.getDueDate()));
 
+        descriptionText = (TextView)findViewById(R.id.label_description);
+        receivedDescription = receivedDescription == null ? task.getDescription() : receivedDescription;
+        receivedDescription = receivedDescription == null ? "" : receivedDescription;
+        descriptionText.setText(Html.fromHtml(
+                receivedDescription == null ? task.getDescription() : receivedDescription
+        ));
+        task.setDescription(receivedDescription);
+
         tagAdapter = new ArrayAdapter<Tag>(this, android.R.layout.simple_list_item_1);
         tagInput = (TagsCompletionView)findViewById(R.id.tag_input);
         tagInput.setAdapter(tagAdapter);
@@ -75,12 +131,14 @@ public class EditTaskActivity extends AppCompatActivity {
         Tag.getAll(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                for (ParseObject obj : objects){
+                tagAdapter.clear();
+                for (ParseObject obj : objects) {
                     tagAdapter.add(Tag.newInstance(obj));
                 }
             }
         }, true);
 
+        tagInput.clear();
         for (Tag tag : task.getTags()){
             tagInput.addObject(tag);
         }

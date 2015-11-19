@@ -124,6 +124,14 @@ public class Task {
         parseObject.put("name", name);
         return this;
     }
+    public String getDescription() {
+        return parseObject.getString("description");
+    }
+
+    public Task setDescription(String description) {
+        parseObject.put("description", description);
+        return this;
+    }
 
     public Date getDueDate() {
         Date date = parseObject.getDate("dueDate");

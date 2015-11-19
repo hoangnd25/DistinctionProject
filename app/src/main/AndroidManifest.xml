@@ -54,6 +54,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.hoangnd.swin.distinctionproject.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.DescriptionActivity"
+            android:label="@string/title_activity_description"
+            android:parentActivityName=".activity.EditTaskActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.hoangnd.swin.distinctionproject.activity.EditTaskActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class TaskDetailActivity extends AppCompatActivity {
     private Task task;
     private TextView dueDateLabel;
     private TextView tagLabel;
+    private TextView descriptionLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         dueDateLabel = (TextView)findViewById(R.id.label_due_date_value);
         tagLabel = (TextView)findViewById(R.id.label_tag_value);
+        descriptionLabel = (TextView)findViewById(R.id.label_description_value);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         dueDateLabel.setText(sdf.format(task.getDueDate()));
@@ -63,6 +66,10 @@ public class TaskDetailActivity extends AppCompatActivity {
             tagString += i == tags.size() - 1 ? "  " : ",  ";
         }
         tagLabel.setText(tagString);
+
+        String description = task.getDescription();
+        description = description == null ? "" : description;
+        descriptionLabel.setText(Html.fromHtml(description));
     }
 
     protected void deleteTask(){
