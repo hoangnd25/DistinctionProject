@@ -8,18 +8,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import me.hoangnd.swin.distinctionproject.R;
+import me.hoangnd.swin.distinctionproject.component.TagsCompletionView;
+import me.hoangnd.swin.distinctionproject.data.Tag;
 import me.hoangnd.swin.distinctionproject.data.Task;
 
 public class EditTaskActivity extends AppCompatActivity {
@@ -28,6 +34,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
     EditText nameInput;
     EditText dateInput;
+    TagsCompletionView tagInput;
+    ArrayAdapter<Tag> tagAdapter;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
 
@@ -40,6 +48,19 @@ public class EditTaskActivity extends AppCompatActivity {
 
         nameInput = (EditText) findViewById(R.id.name_input);
         dateInput = (EditText) findViewById(R.id.due_date_input);
+
+        tagAdapter = new ArrayAdapter<Tag>(this, android.R.layout.simple_list_item_1);
+        tagInput = (TagsCompletionView)findViewById(R.id.tag_input);
+        tagInput.setAdapter(tagAdapter);
+
+        Tag.getAll(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                for (ParseObject obj : objects){
+                    tagAdapter.add(Tag.newInstance(obj));
+                }
+            }
+        }, true);
     }
 
     public void showDatePicker(View v) {
@@ -67,9 +88,15 @@ public class EditTaskActivity extends AppCompatActivity {
         if(cancel)
             return;
 
+        List<Tag> tags = tagInput.getObjects();
+        for (Tag tag : tags){
+            tag.save();
+        }
+
         task
                 .setName(name)
                 .setDueDate(date)
+                .setTags(tags)
                 .save();
         finish();
     }

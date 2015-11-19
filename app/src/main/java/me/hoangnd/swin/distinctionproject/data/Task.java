@@ -3,6 +3,7 @@ package me.hoangnd.swin.distinctionproject.data;
 import com.parse.FindCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -14,8 +15,6 @@ public class Task {
     public static String TABLE_NAME = "Task";
 
     private ParseObject parseObject;
-    private String name;
-    private Date dueDate;
 
     public static Task newInstance(){
         Task task = new Task();
@@ -69,6 +68,15 @@ public class Task {
 
     public Task setDueDate(Date dueDate) {
         parseObject.put("dueDate", dueDate);
+        return this;
+    }
+
+    public Task setTags(List<Tag> tags){
+        ParseRelation<ParseObject> relation = parseObject.getRelation("tags");
+        for(Tag tag : tags){
+            relation.add(tag.getParseObject());
+        }
+
         return this;
     }
 
