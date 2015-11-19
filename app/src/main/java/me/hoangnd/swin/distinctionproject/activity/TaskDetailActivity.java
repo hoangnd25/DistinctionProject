@@ -30,7 +30,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        String taskId = getIntent().getExtras().getString(ID_PARAM);;
+        taskId = getIntent().getExtras().getString(ID_PARAM);;
         if(taskId == null)
             return;
 

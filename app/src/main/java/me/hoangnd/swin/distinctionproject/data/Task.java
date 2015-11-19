@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import me.hoangnd.swin.distinctionproject.filter.TaskFilter;
+
 public class Task {
 
     public static String TABLE_NAME = "Task";
@@ -64,12 +66,22 @@ public class Task {
     }
 
     public static void getAll(FindCallback<ParseObject> callback, boolean local){
+        getAll(null, callback, local);
+    }
+
+    public static void getAll(TaskFilter filter, FindCallback<ParseObject> callback, boolean local){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_NAME);
         if(local){
             query.fromPin();
         }
         query.include("tags");
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
+        if(filter != null){
+            if(filter.getTagId() != null){
+                Tag tag = Tag.getById(filter.getTagId());
+                query.whereEqualTo("tags", tag.getParseObject());
+            }
+        }
         query.orderByDescending("dueDate");
         query.findInBackground(callback);
     }

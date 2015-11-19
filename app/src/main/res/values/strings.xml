@@ -4,7 +4,7 @@
     <string name="title_activity_add_task">Add task</string>
     <string name="title_activity_edit_task">Edit task</string>
     <string name="title_activity_task_detail">TaskDetailActivity</string>
-
+    <string name="title_activity_tag_detail">TagDetailActivity</string>
 
     <string name="title_tab_list">List</string>
     <string name="title_tab_calendar">Calendar</string>

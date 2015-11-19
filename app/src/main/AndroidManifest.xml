@@ -46,6 +46,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.hoangnd.swin.distinctionproject.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.TagDetailActivity"
+            android:label="@string/title_activity_tag_detail"
+            android:parentActivityName=".activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.hoangnd.swin.distinctionproject.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

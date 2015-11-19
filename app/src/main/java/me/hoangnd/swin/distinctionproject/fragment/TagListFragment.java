@@ -162,12 +162,12 @@ public class TagListFragment extends ListFragment implements SwipeRefreshLayout.
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (OnTagListInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnTagListInteractionListener");
+        }
     }
 
     @Override
@@ -181,7 +181,7 @@ public class TagListFragment extends ListFragment implements SwipeRefreshLayout.
         super.onListItemClick(l, v, position, id);
 
         if (null != mListener) {
-            mListener.onTagClicked(Tag.newInstance("test"));
+            mListener.onTagClicked(adapter.getItem(position));
         }
     }
 

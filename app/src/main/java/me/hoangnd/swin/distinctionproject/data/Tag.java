@@ -61,6 +61,49 @@ public class Tag {
         return null;
     }
 
+    public static Tag getById(String id){
+        List<ParseObject> results = null;
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_NAME);
+        query.fromPin();
+        query.whereEqualTo("objectId", id);
+        try{
+            results  = query.find();
+        }catch (ParseException ex){}
+
+        if(results != null){
+            if(results.size() > 0)
+                return Tag.newInstance(results.get(0));
+        }
+
+        query = ParseQuery.getQuery(TABLE_NAME);
+        query.fromPin();
+        query.whereEqualTo("localId", id);
+
+        try{
+            results  = query.find();
+        }catch (ParseException ex){}
+
+        if(results != null){
+            if(results.size() > 0)
+                return Tag.newInstance(results.get(0));
+        }
+
+        return null;
+    }
+
+    public String getParseId(){
+        return parseObject.getObjectId();
+    }
+
+    public String getId() {
+        return parseObject.getString("localId");
+    }
+
+    public Tag setId(String id) {
+        parseObject.put("localId", id);
+        return this;
+    }
+
     public String getName() {
         return parseObject.getString("name");
     }

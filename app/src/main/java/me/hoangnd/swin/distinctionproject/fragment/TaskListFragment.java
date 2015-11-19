@@ -25,6 +25,7 @@ import java.util.List;
 
 import me.hoangnd.swin.distinctionproject.R;
 import me.hoangnd.swin.distinctionproject.data.Task;
+import me.hoangnd.swin.distinctionproject.filter.TaskFilter;
 
 public class TaskListFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener{
     private static final String DUE_DATE = "due_date";
@@ -39,7 +40,6 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
 
     SwipeRefreshLayout refreshLayout;
 
-    // TODO: Rename and change types of parameters
     public static TaskListFragment newInstance(String tagId, Date dueDate) {
         TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
@@ -96,7 +96,8 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
     }
 
     protected void reloadFromLocalData(){
-        Task.getAll(new FindCallback<ParseObject>() {
+        TaskFilter filter = new TaskFilter(tagId);
+        Task.getAll(filter, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e != null)
@@ -115,8 +116,9 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
+        final TaskFilter filter = new TaskFilter(tagId);
         // Get new data from server
-        Task.getAll(new FindCallback<ParseObject>() {
+        Task.getAll(filter, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e != null)
@@ -124,7 +126,7 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
                 final List<ParseObject> retrievedObjects = objects;
 
                 // Get all data from local storage
-                Task.getAll(new FindCallback<ParseObject>() {
+                Task.getAll(filter, new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if(objects == null){

@@ -3,12 +3,12 @@ package me.hoangnd.swin.distinctionproject.activity;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -17,17 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import me.hoangnd.swin.distinctionproject.R;
+import me.hoangnd.swin.distinctionproject.data.Tag;
 import me.hoangnd.swin.distinctionproject.data.Task;
 import me.hoangnd.swin.distinctionproject.fragment.MyAccountFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TagListFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TaskListFragment;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener,
-        TaskListFragment.OnTaskListInteractionListener {
+        TaskListFragment.OnTaskListInteractionListener,
+        TagListFragment.OnTagListInteractionListener{
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -91,6 +92,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
+    public void onTagClicked(Tag tag) {
+        Intent intent = new Intent(this, TagDetailActivity.class);
+        if(tag.getParseId() != null){
+            intent.putExtra(TagDetailActivity.ID_PARAM, tag.getParseId());
+        }else{
+            intent.putExtra(TagDetailActivity.ID_PARAM, tag.getId());
+        }
+        startActivity(intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -123,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
