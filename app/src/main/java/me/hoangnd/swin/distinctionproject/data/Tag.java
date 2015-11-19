@@ -30,7 +30,7 @@ public class Tag {
     }
 
     public Tag save(){
-        parseObject.pinInBackground(TABLE_NAME);
+        parseObject.pinInBackground();
         parseObject.saveEventually();
         return this;
     }
@@ -38,7 +38,7 @@ public class Tag {
     public static void getAll(FindCallback<ParseObject> callback, boolean local){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_NAME);
         if(local)
-            query.fromPin(TABLE_NAME);
+            query.fromPin();
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
         query.orderByAscending("name");
         query.findInBackground(callback);
@@ -46,7 +46,7 @@ public class Tag {
 
     public static Tag getByName(String name){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_NAME);
-        query.fromPin(TABLE_NAME);
+        query.fromPin();
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
         query.whereEqualTo("name", name);
         List<ParseObject> results = null;

@@ -17,14 +17,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import me.hoangnd.swin.distinctionproject.R;
+import me.hoangnd.swin.distinctionproject.data.Task;
 import me.hoangnd.swin.distinctionproject.fragment.MyAccountFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TagListFragment;
 import me.hoangnd.swin.distinctionproject.fragment.TaskListFragment;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
+public class MainActivity extends AppCompatActivity implements ActionBar.TabListener,
+        TaskListFragment.OnTaskListInteractionListener {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -74,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+    }
+
+    @Override
+    public void onTaskClicked(Task task) {
+        Intent intent = new Intent(this, TaskDetailActivity.class);
+        if(task.getParseId() != null){
+            intent.putExtra(TaskDetailActivity.ID_PARAM, task.getParseId());
+        }else{
+            intent.putExtra(TaskDetailActivity.ID_PARAM, task.getId());
+        }
+        startActivity(intent);
     }
 
     @Override

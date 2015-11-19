@@ -2,6 +2,8 @@
     <string name="app_name">Task</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_task">Add task</string>
+    <string name="title_activity_task_detail">TaskDetailActivity</string>
+
 
     <string name="title_tab_list">List</string>
     <string name="title_tab_calendar">Calendar</string>
@@ -10,5 +12,11 @@
 
     <string name="action_add_task">Add</string>
     <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
+
+    <string name="message_confirm_delete_task">Are you sure you want to delete this task?</string>
 
 </resources>

@@ -35,7 +35,7 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
 
     private ArrayAdapter<Task> adapter;
 
-    private OnFragmentInteractionListener mListener;
+    private OnTaskListInteractionListener mListener;
 
     SwipeRefreshLayout refreshLayout;
 
@@ -102,6 +102,9 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
                 if (e != null)
                     return;
 
+                if(objects == null || objects.size() < 1)
+                    onRefresh();
+
                 adapter.clear();
                 for (ParseObject obj : objects) {
                     adapter.add(Task.newInstance(obj));
@@ -124,6 +127,17 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
                 Task.getAll(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
+                        if(objects == null){
+                            ParseObject.pinAllInBackground(retrievedObjects, new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    reloadFromLocalData();
+                                    refreshLayout.setRefreshing(false);
+                                }
+                            });
+                            return;
+                        }
+
                         // Find saved objects (objectId != null)
                         List<ParseObject> savedObjects = new ArrayList<ParseObject>();
                         for (ParseObject obj : objects) {
@@ -132,11 +146,11 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
                         }
 
                         // Unpin all saved objects
-                        ParseObject.unpinAllInBackground(Task.TABLE_NAME, savedObjects, new DeleteCallback() {
+                        ParseObject.unpinAllInBackground(savedObjects, new DeleteCallback() {
                             @Override
                             public void done(ParseException e) {
                                 // Save new data from server
-                                ParseObject.pinAllInBackground(Task.TABLE_NAME, retrievedObjects, new SaveCallback() {
+                                ParseObject.pinAllInBackground(retrievedObjects, new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
                                         reloadFromLocalData();
@@ -159,6 +173,11 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(getListView().getChildCount() < 1){
+            refreshLayout.setEnabled(true);
+            return;
+        }
+
         if (firstVisibleItem == 0 && visibleItemCount > 0 && getListView().getChildAt(0).getTop() >= 0) {
             refreshLayout.setEnabled(true);
         }
@@ -189,12 +208,12 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+            mListener = (OnTaskListInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnTaskListInteractionListener");
+        }
     }
 
     @Override
@@ -208,12 +227,12 @@ public class TaskListFragment extends ListFragment implements SwipeRefreshLayout
         super.onListItemClick(l, v, position, id);
 
         if (null != mListener) {
-//            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            mListener.onTaskClicked(adapter.getItem(position));
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+    public interface OnTaskListInteractionListener {
+        public void onTaskClicked(Task task);
     }
 
 }
