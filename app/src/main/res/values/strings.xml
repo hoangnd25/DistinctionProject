@@ -2,6 +2,7 @@
     <string name="app_name">Task</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_task">Add task</string>
+    <string name="title_activity_edit_task">Edit task</string>
     <string name="title_activity_task_detail">TaskDetailActivity</string>
 
 

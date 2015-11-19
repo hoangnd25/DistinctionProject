@@ -1,6 +1,7 @@
 package me.hoangnd.swin.distinctionproject.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     public static String ID_PARAM = "ID";
 
+    private String taskId;
     private Task task;
     private TextView dueDateLabel;
     private TextView tagLabel;
@@ -28,11 +30,21 @@ public class TaskDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        String id = getIntent().getExtras().getString(ID_PARAM);;
-        if(id == null)
+        String taskId = getIntent().getExtras().getString(ID_PARAM);;
+        if(taskId == null)
             return;
 
-        task = Task.getById(id);
+        task = Task.getById(taskId);
+        if(task == null)
+            return;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(task == null)
+            task = Task.getById(taskId);
         if(task == null)
             return;
 
@@ -73,6 +85,16 @@ public class TaskDetailActivity extends AppCompatActivity {
                 .show();
     }
 
+    protected void editTask(){
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        if(task.getParseId() != null){
+            intent.putExtra(TaskDetailActivity.ID_PARAM, task.getParseId());
+        }else{
+            intent.putExtra(TaskDetailActivity.ID_PARAM, task.getId());
+        }
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_task_detail, menu);
@@ -87,6 +109,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             deleteTask();
             return true;
         }else if(id == R.id.action_edit){
+            editTask();
             return true;
         }
 

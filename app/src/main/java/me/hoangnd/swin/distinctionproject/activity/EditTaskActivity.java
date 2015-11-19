@@ -2,6 +2,7 @@ package me.hoangnd.swin.distinctionproject.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,9 @@ import me.hoangnd.swin.distinctionproject.data.Task;
 
 public class EditTaskActivity extends AppCompatActivity {
 
+    public static String ID_PARAM = "ID";
+
+    boolean isEditing = false;
     Task task;
 
     EditText nameInput;
@@ -44,10 +48,25 @@ public class EditTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
-        task = Task.newInstance();
+        String id = null;
+        Intent intent = getIntent();
+        if(intent != null & intent.getExtras() != null){
+            id = intent.getExtras().getString(ID_PARAM);
+        }
+
+        if(id == null){
+            task = Task.newInstance();
+        }else{
+            task = Task.getById(id);
+            setTitle(getResources().getString(R.string.title_activity_edit_task));
+            isEditing = true;
+        }
 
         nameInput = (EditText) findViewById(R.id.name_input);
         dateInput = (EditText) findViewById(R.id.due_date_input);
+
+        nameInput.setText(task.getName());
+        dateInput.setText(dateFormat.format(task.getDueDate()));
 
         tagAdapter = new ArrayAdapter<Tag>(this, android.R.layout.simple_list_item_1);
         tagInput = (TagsCompletionView)findViewById(R.id.tag_input);
@@ -61,6 +80,10 @@ public class EditTaskActivity extends AppCompatActivity {
                 }
             }
         }, true);
+
+        for (Tag tag : task.getTags()){
+            tagInput.addObject(tag);
+        }
     }
 
     public void showDatePicker(View v) {

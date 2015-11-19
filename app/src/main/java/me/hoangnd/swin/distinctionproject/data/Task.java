@@ -132,6 +132,7 @@ public class Task {
         for(Tag tag : tags){
             objects.add(tag.getParseObject());
         }
+        parseObject.remove("tags");
         parseObject.addAll("tags", objects);
         return this;
     }
