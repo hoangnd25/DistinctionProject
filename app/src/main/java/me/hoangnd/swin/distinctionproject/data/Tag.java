@@ -1,9 +1,12 @@
 package me.hoangnd.swin.distinctionproject.data;
 
 import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 public class Tag {
 
@@ -39,6 +42,23 @@ public class Tag {
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
         query.orderByAscending("name");
         query.findInBackground(callback);
+    }
+
+    public static Tag getByName(String name){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TABLE_NAME);
+        query.fromPin(TABLE_NAME);
+        query.whereEqualTo("owner", ParseUser.getCurrentUser());
+        query.whereEqualTo("name", name);
+        List<ParseObject> results = null;
+        try{
+            results = query.find();
+            if(results.size() > 0)
+                return Tag.newInstance(results.get(0));
+            return null;
+        }catch (ParseException ex){
+        }
+
+        return null;
     }
 
     public String getName() {

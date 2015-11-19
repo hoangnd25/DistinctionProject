@@ -9,7 +9,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.tokenautocomplete.TokenCompleteTextView;
+
+import java.util.List;
 
 import me.hoangnd.swin.distinctionproject.R;
 import me.hoangnd.swin.distinctionproject.data.Tag;
@@ -37,6 +42,10 @@ public class TagsCompletionView extends TokenCompleteTextView<Tag> {
 
     @Override
     protected Tag defaultObject(String s) {
-        return Tag.newInstance(s);
+        Tag tag = Tag.getByName(s);
+        if (tag == null)
+            return Tag.newInstance(s);
+
+        return tag;
     }
 }
